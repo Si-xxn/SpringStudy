@@ -2,11 +2,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>net.kkkcloud</groupId>
+	<groupId>org.zerock</groupId>
 	<artifactId>controller</artifactId>
-	<name>OracleJDBC</name>
+	<name>Board</name>
 	<packaging>war</packaging>
-	<version>1.0.0-BUILD-SNAPSHOT</version> 
+	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<properties>
 		<java-version>11</java-version>
 		<org.springframework-version>5.0.7.RELEASE</org.springframework-version>
@@ -17,8 +17,8 @@
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId> <!-- 스프링 메모리 영역(model / new 안씀) -->
-			<version>${org.springframework-version}</version> <!-- properties -->
+			<artifactId>spring-context</artifactId>
+			<version>${org.springframework-version}</version>
 			<exclusions>
 				<!-- Exclude Commons Logging in favor of SLF4j -->
 				<exclusion>
@@ -32,7 +32,7 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
-				
+		
 		<dependency>  <!--test 코드 활성화 적용 p54 -->
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
@@ -42,13 +42,13 @@
 		@RunWith(SpringJUnit4ClassRunner.class) // Junit4 : 메서드별 테스트용
 		@ContextConfiguration("file:src/main/webapp/WEB-INF/spring/root-context.xml") // 참고할 파일
 		@Log4j2  -->
-				
+		
 		<dependency> <!-- dto 객체 자동화 lombok 적용 p54 -->
 		   <groupId>org.projectlombok</groupId>
 		   <artifactId>lombok</artifactId>
 		   <version>1.18.24</version>
 		   <scope>provided</scope>
-		</dependency> 
+		</dependency>
 		
 		<!-- jdbc 셋팅 1.드라이버  2.커넥션풀  3.mybatis  4.jdbclog4j2 -->
 		<!-- https://mvnrepository.com/artifact/com.oracle.database.jdbc/ojdbc8 -->
@@ -132,15 +132,15 @@
 			<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property> 
 			<property name="jdbcUrl" value="jdbc:log4jdbc:oracle:thin:@localhost:1521:XE"></property>
 		 -->
-		
-		<!-- AOP관련 설정(445p) : AspectJ -->
+				
+		<!-- AOP관련 : AspectJ -->
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
 			<version>${org.aspectj-version}</version>
 		</dependency>	
 		
-		<!-- Logging (구형 log4 버전 사용 안함 >> 하단에 log4j2 추가)
+		<!-- Logging
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -198,7 +198,7 @@
   	         <artifactId>log4j-slf4j-impl</artifactId>
   	         <version>2.18.0</version>
   	    </dependency> <!-- 보안 이슈로 log4j2로 향상 -->
-  	    
+
 		<!-- @Inject -->
 		<dependency>
 			<groupId>javax.inject</groupId>
@@ -212,7 +212,7 @@
 			<artifactId>servlet-api</artifactId>
 			<version>2.5</version>
 			<scope>provided</scope>
-		</dependency>  3.1.0 버전으로 향상-->
+		</dependency> 3.1.0 버전으로 향상 -->
 		
 		<!-- 3.1.0버전으로 향상 https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
 		<dependency>
@@ -221,27 +221,26 @@
 		    <version>3.1.0</version>
 		    <scope>provided</scope>
 		</dependency>
-
 		
-		<dependency> <!-- 프론트 jsp로 사용 -->
+		<dependency> 
 			<groupId>javax.servlet.jsp</groupId>
 			<artifactId>jsp-api</artifactId>
 			<version>2.1</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency> <!-- jstl용 jar 파일 주입 -->
+		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
 	
 		<!-- Test -->
-		<dependency> <!-- test 폴더에서 메서드별로 테스팅이 됨 -->
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version> <!-- 4.7을 4.12 버전으로 향상 -->
+			<version>4.12</version>
 			<scope>test</scope>
-		</dependency>
+		</dependency>  
 		
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
 		<!-- Jackson-databind : 컨트롤러에서 처리된 결과를 json타입으로 프론트에 보냄 -->
@@ -270,13 +269,12 @@
 		<beans:property name="maxUploadSizePerFile"	value="2097152"></beans:property>
 		<beans:property name="uploadTempDir" value="file:/D:/upload/tmp"></beans:property>
 		<beans:property name="maxInMemorySize" value="10485756"></beans:property>
-		</beans:bean> -->
-		        
-		</dependencies>	
+		</beans:bean> -->		      
+	</dependencies>
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-eclipse-plugin</artifactId> <!--  -->
+                <artifactId>maven-eclipse-plugin</artifactId>
                 <version>2.9</version>
                 <configuration>
                     <additionalProjectnatures>
@@ -290,12 +288,12 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId> 
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version> <!-- 2.5.1 버전을 3.5.1 버전으로 향상 -->
+                <version>3.5.1</version>
                 <configuration>
-                    <source>11</source> <!-- jdk 버전 11로 향상 -->
-                    <target>11</target> <!-- jdk 버전 11로 향상 -->
+                    <source>11</source>
+                    <target>11</target>
                     <compilerArgument>-Xlint:all</compilerArgument>
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>
