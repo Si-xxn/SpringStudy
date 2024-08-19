@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- xml를 활용한 공통코드 -->
+
+<mapper namespace="net.kkkcloud.mapper.TimeMapper">
+<!-- 관련된 패키지.인터케이스 기술 -->
+
+<!-- sql 코드를 삽입한다. -->
+
+<select id="getTimeXML" resultType="String" >
+	select sysdate from dual
+</select>
+</mapper>
