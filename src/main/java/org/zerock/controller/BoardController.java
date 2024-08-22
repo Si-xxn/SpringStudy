@@ -28,10 +28,18 @@ public class BoardController {
 		model.addAttribute("list", service.getList()); // name : list , Object : List<BoardVO>
 	}
 	
+	@GetMapping("/register") // // http://localhost:80/board/register
+	public void register() {
+		// 페이지를 보여주는 역할만 하기 때문에 별도의 처리가 필요하지 않음
+		log.info("BoardController.register get메서드 실행");
+		
+		// 리턴 void : URL과 같은 jsp 파일을 찾는다.(http://localhost:80/board/register.jsp)
+	}
+	
 	@PostMapping("/register") // http://localhost:80/board/register
 	public String register(BoardVO board, RedirectAttributes rttr) {
 		// RedirectAttributes : 일회성을 가지는 값을 제공 (addFlashAttribute("name","value")
-		log.info("BoardController.register 메서드 실행");
+		log.info("BoardController.register post메서드 실행");
 		service.register(board); // 프론트에서 form 값이 객체로 넘어옴
 		
 		rttr.addFlashAttribute("result", board.getBno()); // 객체에 있는 BNO값을 1회성으로 model영역이 가지고있음
@@ -39,7 +47,9 @@ public class BoardController {
 		return "redirect:/board/list"; // 등록 후 list 페이지로 보냄 http://localhost:80/board/list
 	}
 	
-	@GetMapping("/get") // http://localhost:80/board/get
+	@GetMapping({"/get", "/modify"}) // http://localhost:80/board/get
+	// 이중화 작업 : http://localhost:80/board/get -> board/get.jsp
+	// 이중화 작업 : http://localhost:80/board/modify -> board/modify.jsp
 	public void get(@RequestParam("bno") Long bno, Model model) {
 		log.info("BoardController.get 메서드 실행");
 		model.addAttribute("board", service.get(bno));
