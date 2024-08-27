@@ -13,74 +13,92 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import lombok.Setter;
+import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration // 프론트 테스트용
-@ContextConfiguration({ // 배열처리
-	"file:src/main/webapp/WEB-INF/spring/root-context.xml",
-	"file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml"
-})
+
+// Test for Controller
+@WebAppConfiguration
+
+@ContextConfiguration({ "file:src/main/webapp/WEB-INF/spring/root-context.xml",
+		"file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml" })
+// Java Config
+// @ContextConfiguration(classes = {
+// org.zerock.config.RootConfig.class,
+// org.zerock.config.ServletConfig.class} )
 @Log4j2
 public class BoardControllerTests {
-	@Setter(onMethod_ = @Autowired)
-	private WebApplicationContext ctx; // 톰캣 대신
-	
-	private MockMvc mockMvc; // 크롬 대신
-	
-	@Before // JUnit 으로 import >> 구동 전에 선행되어야 하는 코드 작성
+
+	@Setter(onMethod_ = { @Autowired })
+	private WebApplicationContext ctx;
+
+	private MockMvc mockMvc;
+
+	@Before
 	public void setup() {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(ctx).build();
 	}
-	
-	@Test // URL과 결과를 처리해주는 테스트
+
+	@Test
 	public void testList() throws Exception {
+
 		log.info(
-				mockMvc.perform(MockMvcRequestBuilders.get("/board/list")) // URL 
-				.andReturn()											   // 결과
-				.getModelAndView() 										   // 모델에서 뷰까지
-				.getModelMap()); 										   // 표형식 출력
+				mockMvc.perform(MockMvcRequestBuilders.get("/board/list")).andReturn().getModelAndView().getModelMap());
 	}
-	
+
 	@Test
-	public void testRegister() throws Exception{
-		String resultPage = mockMvc.perform(MockMvcRequestBuilders.post("/board/register")
-				.param("title", "컨트롤러 테스트 제목")
-				.param("content", "컨트롤러 테스트 내용")
-				.param("writer", "controller")
-				).andReturn().getModelAndView().getViewName();
-		// getViewName : return 값을 받아서 String 처리 = resultPage
-		log.info(resultPage); // 결과 : redirect:/board/list
+	public void testRegister() throws Exception {
+
+		String resultPage = mockMvc
+				.perform(MockMvcRequestBuilders.post("/board/register")
+				.param("title", "테스트 새글 제목")
+				.param("content", "테스트 새글 내용")
+				.param("writer", "user00"))
+				.andReturn().getModelAndView().getViewName();
+
+		log.info(resultPage);
+
 	}
-	
-	@Test // BNO 넘어가면 돌아오는 값은 객체
-	public void testGet() throws Exception { // http://localhost:80/board/get?bno=10
-		log.info(
-				mockMvc.perform(MockMvcRequestBuilders.get("/board/get")
-				.param("bno", "6"))
-				.andReturn()
-				.getModelAndView().getModelMap());				
-	}
-	
+
 	@Test
-	public void testModify() throws Exception{
-		String resultPage = mockMvc.perform(MockMvcRequestBuilders.post("/board/modify")
-				.param("bno", "6")
-				.param("title", "컨트롤러 수정 테스트 제목")
-				.param("content", "컨트롤러 수정 테스트 내용")
-				.param("writer", "controller")
-				).andReturn().getModelAndView().getViewName();
-		// getViewName : return 값을 받아서 String 처리 = resultPage
-		log.info("결과 : " + resultPage); // 결과 : redirect:/board/list
+	public void testGet() throws Exception {
+
+		log.info(mockMvc.perform(MockMvcRequestBuilders.get("/board/get").param("bno", "2")).andReturn()
+				.getModelAndView().getModelMap());
 	}
-	
+
+	@Test
+	public void testModify() throws Exception {
+
+		String resultPage = mockMvc
+				.perform(MockMvcRequestBuilders.post("/board/modify").param("bno", "1").param("title", "수정된 테스트 새글 제목")
+						.param("content", "수정된 테스트 새글 내용").param("writer", "user00"))
+				.andReturn().getModelAndView().getViewName();
+
+		log.info(resultPage);
+
+	}
+
 	@Test
 	public void testRemove() throws Exception {
-		String resultPage = mockMvc.perform(MockMvcRequestBuilders.post("/board/remove")
-				.param("bno", "7"))
-				.andReturn().getModelAndView().getViewName();
-		// getViewName : return 값을 받아서 String 처리 = resultPage
-		log.info("결과 : " + resultPage); // 결과 : redirect:/board/list
+		// 삭제전 데이터베이스에 게시물 번호 확인할 것
+		String resultPage = mockMvc.perform(MockMvcRequestBuilders.post("/board/remove").param("bno", "25")).andReturn()
+				.getModelAndView().getViewName();
+
+		log.info(resultPage);
 	}
-	
+
+	@Test
+	public void testListPaging() throws Exception {
+
+		log.info(mockMvc.perform(
+				MockMvcRequestBuilders.get("/board/list")
+				.param("pageNum", "2")
+				.param("amount", "50"))
+				.andReturn().getModelAndView().getModelMap());
+	}
+
 }
+
+
