@@ -23,4 +23,6 @@ public interface ReplyMapper {
 			@Param("cri") Criteria cri, // 페이징 처리 기분점
 			@Param("bno") Long bno);    // 게시물 번호 (PK + FK)
 	
+	public int getCountByBno(Long bno);
+	
 }

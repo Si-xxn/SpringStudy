@@ -173,11 +173,6 @@
 </div>
 <!-- /.row -->
 
-
-
-
-
-
 <script type="text/javascript">
 	$(document)
 			.ready(

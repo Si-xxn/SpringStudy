@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.zerock.domain.Criteria;
+import org.zerock.domain.ReplyPageDTO;
 import org.zerock.domain.ReplyVO;
 import org.zerock.service.ReplyService;
 
@@ -50,7 +51,7 @@ public class ReplyController { // Rest 방식의 컨트롤러로 구현 + Ajax �
 	@GetMapping(value="/pages/{bno}/{page}",
 			produces = { MediaType.APPLICATION_XML_VALUE,
 						 MediaType.APPLICATION_JSON_UTF8_VALUE })
-	public ResponseEntity<List<ReplyVO>> getList(@PathVariable("page") int page, @PathVariable("bno") Long bno) {
+	public ResponseEntity<ReplyPageDTO> getList(@PathVariable("page") int page, @PathVariable("bno") Long bno) {
 		
 		log.info("ReplyController.getList()메서드 실행");
 		log.info("Page 번호 : " + page);
@@ -60,7 +61,7 @@ public class ReplyController { // Rest 방식의 컨트롤러로 구현 + Ajax �
 		
 		log.info("Criteria : "+cri);
 		
-		return new ResponseEntity<>(service.getList(cri, bno), HttpStatus.OK);
+		return new ResponseEntity<>(service.getListPage(cri, bno), HttpStatus.OK);
 		// [{"rno":2,"bno":10,"reply":"댓글 10","replyer":"kkk","replyDate":1724723791000,"updateDate":1724723791000},
 		// {"rno":16,"bno":10,"reply":"댓글 10","replyer":"kkk","replyDate":1724723812000,"updateDate":1724723812000},
 		// {"rno":21,"bno":10,"reply":"postmanTest","replyer":"kkk","replyDate":1724735370000,"updateDate":1724735370000}]
@@ -94,6 +95,8 @@ public class ReplyController { // Rest 방식의 컨트롤러로 구현 + Ajax �
 	
 	
 	@RequestMapping(method = { RequestMethod.PUT, RequestMethod.PATCH },
+			// Put 객체 전체 필드
+			
 			value="/{rno}",
 			consumes = "application/json",
 			produces = {MediaType.TEXT_PLAIN_VALUE })

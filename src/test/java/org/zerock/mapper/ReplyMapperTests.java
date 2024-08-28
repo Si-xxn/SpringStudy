@@ -90,5 +90,14 @@ public class ReplyMapperTests {
 		// INFO  org.zerock.mapper.ReplyMapperTests(lambda$088) - ReplyVO(rno=16, bno=10, reply=댓글 10, replyer=kkk, replyDate=Tue Aug 27 10:56:52 KST 2024, updateDate=Tue Aug 27 10:56:52 KST 2024)
 
 	}
+	
+	@Test
+	public void testList2() {
+		Criteria cri = new Criteria(2, 10);
+		
+		List<ReplyVO> replies = mapper.getListWithPaging(cri, 8L);
+		
+		replies.forEach(reply -> log.info(reply));
+	}
 
 }
